@@ -8,6 +8,9 @@ use App\Http\Controllers\MiddlewareController;
 use App\Http\Controllers\ControllerGlobalMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;    
+use App\Http\Controllers\HttpResponseController;
+use App\Http\Controllers\MailController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,12 +84,23 @@ Route::get('/', function () {
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 // Routes that require authentication
-Route::middleware(['auth', 'verified'])->group(function () {
+/*Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+        //return view('user');
+    })->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});*/
+
+Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
         //return view('user');
@@ -98,3 +112,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Routes that require authentication and authorization
+//Route::resource('post', PostController::class)->middleware('auth');
+//Route::resource('post', PostController::class)->middleware(['auth', 'can:update,post']);
+
+// HTTP Responses
+//Route::resource('post', HttpResponseController::class)->middleware('auth');
+
+// Mail Routes
+Route::resource('mail', MailController::class);
